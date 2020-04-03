@@ -24,7 +24,7 @@ func BytesToInt2(arr []byte) int {
 	}
 }
 
-//整形转换成字节  len>4
+//整形转换成字节  len>0
 func IntToBytes(n int) []byte {
     x := int32(n)
 
