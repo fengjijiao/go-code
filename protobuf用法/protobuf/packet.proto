@@ -1,0 +1,43 @@
+syntax = "proto3";  // 指定使用 proto3 语法
+
+option java_package = "test";     // 指定包名
+option java_outer_classname = "PacketProto"; // 指定类名
+
+message Packet {
+
+    message Head {
+        uint32 hPorotolType = 1;
+        uint32 hOperationType = 2;
+        uint64 hMsgBodyLength = 3;
+        uint64 hMsgID = 4;
+    }
+
+    enum ContentType {
+        TEXT = 0;
+        IMAGE = 1;
+        VIDEO = 2;
+        VOICE = 3;
+        NEWS = 4;
+        DECLARE = 5;
+        MUSIC = 6;
+        BROADCAST = 7;
+        OTHER = 8;
+    }
+
+    message Body {
+        uint32 bType = 1;
+        string bAction = 2;
+        ContentType bContentType = 3;
+        Content bContent = 4;
+        uint64 bTimestamp = 5;
+    }
+
+    message Content {
+        string cToID = 1;
+        string cFromID = 2;
+        string cContext = 3;
+        uint64 cFlag = 4;
+        string cOther = 5;
+    }
+
+}
