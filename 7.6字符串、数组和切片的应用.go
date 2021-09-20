@@ -37,7 +37,7 @@ func main() {
 	c0 := []byte(s2)
 	c0[0] = 'c'
 	s3 := string(c0)
-	fmt.Printf("res: %s\n", s3)//res: cello
+	fmt.Printf("res: %s\n", s3) //res: cello
 	//所以，可以通过操作切片来完成对字符串的操作。
 
 	//7.6.5字节数组对比函数
@@ -70,9 +70,9 @@ func main() {
 	//8.在索引为i的位置插入切片b的所有元素
 	//a=append(a[:i], append(b, a[i:]...)...)
 	//9.取出位于切片a最末尾的元素x
-	a := []int{1,2,3,4,5,6}
+	a := []int{1, 2, 3, 4, 5, 6}
 	x, a := a[len(a)-1], a[:len(a)-1]
-	fmt.Printf("x: %d, a: %v\n", x, a)//x: 6, a: [1 2 3 4 5]
+	fmt.Printf("x: %d, a: %v\n", x, a) //x: 6, a: [1 2 3 4 5]
 	//10.将元素x追加到切片a：
 	//a=append(a, x)
 	//因此。可以使用切片和append操作来表示任意可变长度的序列。
@@ -92,10 +92,10 @@ func main() {
 	//练习7.12 编写一个函数，要求其接受两个参数，原始字符串str和分割索引i，然后返回两个分割后的字符串。
 	s4 := "hello world!"
 	s5, s6 := SplitSlice(s4, 6)
-	fmt.Printf("%s@%s\n", s5, s6)//hello @world!
+	fmt.Printf("%s@%s\n", s5, s6) //hello @world!
 	//练习7.13 假设有字符串str，那么str[len(str)/2:] + str[:len(str)/2]的结果是什么？
-	s7 := s4[len(s4)/2:] + s4[:len(s4)/2]//这样两个s4[...]并列执行
-	fmt.Printf("%s\n", s7)//world!hello
+	s7 := s4[len(s4)/2:] + s4[:len(s4)/2] //这样两个s4[...]并列执行
+	fmt.Printf("%s\n", s7)                //world!hello
 	//练习7.14 编写一个程序，要求能够反转字符串，即将“Google”转换成“elgooG”（提示：使用[]byte类型的切片）
 	fmt.Printf("reversed: %s\n", ReverseString("Google"))
 	//如果使用两个切片来实现翻转，请再尝试使用一个切片（提示：使用交换法）。
@@ -103,15 +103,54 @@ func main() {
 	//练习7.15 编写一个程序，要求能够遍历一个数组的字符，并将当前字符和前一个字符不相同的字符拷贝至另一个数组。
 	s8 := "oookkkaaaabbbbdddeee"
 	fmt.Printf("source: %s\nresult: %s\n", s8, string(ArrDiff(s8)))
+	/**
+	source: oookkkaaaabbbbdddeee
+	result: okabde
+	*/
+	//编写一个程序，使用冒泡排序的方法排序一个包含整数的切片。
+	a3 := []int{8, 5, 3, 9, 10, 1, 6}
+	fmt.Printf("%v\n", BubbleSortArr(a3))
+	//在函数式编程中，一个map-function是指能够接受一个函数原型和一个列表，并使用列表中的值依此执行函数原型，公式为：map(F(), (e1,e2,...,en))=(F(e1),F(e2)...F(en))
+	//编写一个函数mapFunc要求接受以下2个参数：
+	//1.一个将整数乘以10的函数
+	//2.一个整数列表
+	//最后返回保存结果的整数列表。
+	fmt.Printf("%v\n", MapFunc(func(i2 int) int {
+		return i2 * 10
+	}, []int{1, 2, 3, 4, 5, 6}))
+}
+
+func MapFunc(f func(int) int, l0 []int) (res []int) {
+	for _, i3 := range l0 {
+		res = append(res, f(i3))
+	}
+	return
+}
+
+func BubbleSortArr(slice []int) []int {
+	l := len(slice)
+	var temp int
+	for range slice {
+		for i4 := range slice {
+			if i4+1 < l && slice[i4+1] < slice[i4] {
+				temp = slice[i4]
+				slice[i4] = slice[i4+1]
+				slice[i4+1] = temp
+			}
+		}
+	}
+	return slice
 }
 
 func ArrDiff(s0 string) (res []byte) {
 	a0 := []byte(s0)
-	l0 := len(a0)-1
-	for i:=0;i< len(a0);i++ {
-		if l0-i-1>=0 && a0[l0-i] != a0[l0-i-1] {
-			res=append(res, a0[l0-i])
-			res=append(res, a0[l0-i-1])
+	//l0 := len(a0)-1
+	j := 0
+	res = append(res, a0[0])
+	for i := 0; (i + 1) < len(a0); i++ {
+		if a0[j] != a0[i+1] {
+			res = append(res, a0[i+1])
+			j = i + 1
 		}
 	}
 	return
@@ -119,7 +158,7 @@ func ArrDiff(s0 string) (res []byte) {
 
 func ReverseString(str string) (res string) {
 	b := []byte(str)
-	l := len(b)-1
+	l := len(b) - 1
 	for i2 := range b {
 		fmt.Printf("%d---%d\n", i2, l/2)
 		temp := b[l-i2]
@@ -142,9 +181,9 @@ func SplitSlice(str string, i2 int) (s0, s1 string) {
 
 func FindDigits3(filename string) []byte {
 	fileBytes, _ := ioutil.ReadFile(filename)
-	b := digitRegexp.FindAll(fileBytes, len(fileBytes))//!!important
+	b := digitRegexp.FindAll(fileBytes, len(fileBytes)) //!!important
 	c := make([]byte, 0)
-	for _, bytes := range b {//!!important
+	for _, bytes := range b { //!!important
 		c = append(c, bytes...)
 	}
 	return c
@@ -154,11 +193,12 @@ func FindDigits2(filename string) []byte {
 	b, _ := ioutil.ReadFile(filename)
 	b = digitRegexp.Find(b)
 	c := make([]byte, len(b))
-	copy(c,b)
+	copy(c, b)
 	return c
 }
 
 var digitRegexp = regexp.MustCompile("[0-9]+")
+
 func FindDigits(filename string) []byte {
 	b, _ := ioutil.ReadFile(filename)
 	return digitRegexp.Find(b)
