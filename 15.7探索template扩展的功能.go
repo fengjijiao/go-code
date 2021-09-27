@@ -79,3 +79,59 @@ func main5() {
 
 
 //15.7.5 模板变量$
+//你可以在变量名前加一个$符号来为模板中的管道创建一个局部变量。变量名称只能由字母、数字、下划线组成。在下面的示例中，我使用了几种可以使用的变量名称。
+func main6() {
+	t := template.New("test")
+	t = template.Must(t.Parse("{{with $3 := `hello`}}{{$3}}{{end}}!\n"))//hello!
+	t.Execute(os.Stdout, nil)
+	t =template.Must(t.Parse("{{with $x3 := `hola`}}{{$x3}}{{end}}!\n"))//hola!
+	t.Execute(os.Stdout, nil)
+	t = template.Must(t.Parse("{{with $x_1 := `hey`}}{{$x_1}}{{.}}{{$x_1}}{{end}}!"))//hey hey hey!
+}
+
+
+
+//15.7.6 range-end
+//这个构造的格式
+//{{range pipeline}} T1 {{else}} T0 {{end}}
+//range 在循环的集合中使用：管道的值必须是一个数字、切片或者map。如果管道的值的长度为0,点不会被影响并且T0将会被执行；否则将点设置为拥有连续元素的数组、切片或者map，T1就会被执行。
+//如果它是模板：{{range .}}
+//				{{.}}
+//				{{end}}
+//然后是这个代码：s := []int{1,2,3,4}
+//t.Execute(os.Stdout, s)
+//将会输出:
+//			1
+//			2
+//			3
+//			4
+//20.7中，
+/*
+{{range .}}
+	{{with .Author}}
+		<p><b>{{html .}}</b> wrote:</p>
+	{{else}}
+		<p>An anonymous person wrote:</p>
+	{{end}}
+	<pre>{{html .Content}}</pre>
+	<pre>{{html .Date}}</pre>
+{{end}}
+ */
+//range . 这里循环了一个结构体切片，每个结构体都包含了一个Author、Content和Date字段。
+
+
+
+
+
+//15.7.7 预定义模板函数
+//还可以在代码中使用一些模板函数，例如：和fmt.Printf函数类似的printf函数：
+func main7() {
+	t :=template.New("test")
+	t = template.Must(t.Parse("{{with $x := `hello`}}{{printf `%s %s` $x `Mary`}}{{end}}!\n"))
+	t.Execute(os.Stdout, nil)
+}
+
+
+//在15.6中也这样使用过
+//{{printf "%s" .Body|html}}
+//否则Body的字节会被当作数字显示（字节默认都是int8类型的数字）
